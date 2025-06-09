@@ -7,16 +7,23 @@
 
 import React from 'react';
 import {View, StyleSheet, Text, Pressable} from 'react-native';
+import {Provider, useDispatch, useSelector} from 'react-redux';
+import {store} from './store/store';
+import {increment, decrement} from './store/actions';
 
 const CounterView = () => {
+
+  const count = useSelector( state => state.counter.count);
+  const dispatch = useDispatch();
+
   return (
     <View style={styles.counterView}>
-      <Pressable>
-        <Text>Decrement</Text>
+      <Pressable onPress={() => dispatch(decrement())}>
+        <Text style={styles.txtStyle}>Decrement</Text>
       </Pressable>
-      <Text>0</Text>
-      <Pressable>
-        <Text>Increment</Text>
+      <Text style={styles.txtStyle}>{count}</Text>
+      <Pressable onPress={() => dispatch(increment())}>
+        <Text style={styles.txtStyle}>Increment</Text>
       </Pressable>
     </View>
   );
@@ -31,7 +38,9 @@ const App = () => {
         Native apps.
       </Text>
 
-      <CounterView />
+      <Provider store={store}>
+        <CounterView />
+      </Provider>
     </View>
   );
 };
@@ -54,6 +63,10 @@ const styles = StyleSheet.create({
     marginTop: 24,
     flexDirection: 'row',
     gap: 16,
+  },
+  txtStyle :{
+    fontSize: 24,
+    fontWeight: 'bold',
   },
 });
 
